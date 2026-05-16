@@ -1,0 +1,46 @@
+databases:
+  - name: mrmaintenance-db
+    databaseName: mrmaintenance
+    user: admin
+
+services:
+  - type: web
+    name: mrmaintenance-web
+    env: docker
+    plan: free
+    repo: https://github.com/your-username/mr-maintenance # Replace this after you push!
+    envVars:
+      - key: APP_NAME
+        value: "Mr. Maintenance"
+      - key: APP_ENV
+        value: production
+      - key: APP_KEY
+        generateValue: true
+      - key: APP_DEBUG
+        value: false
+      - key: APP_URL
+        value: "https://mrmaintenance-web.onrender.com"
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_HOST
+        fromDatabase:
+          name: mrmaintenance-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: mrmaintenance-db
+          property: port
+      - key: DB_DATABASE
+        fromDatabase:
+          name: mrmaintenance-db
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: mrmaintenance-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: mrmaintenance-db
+          property: password
+      - key: ADMIN_EMAIL
+        value: abhaypandey9425@gmail.com
