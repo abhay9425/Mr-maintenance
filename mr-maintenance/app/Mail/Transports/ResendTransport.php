@@ -30,18 +30,12 @@ class ResendTransport extends AbstractTransport
         // Resend free tier sends from onboarding@resend.dev
         $from = 'onboarding@resend.dev';
 
-        // Check if we are running in free sandbox mode where we can only send to the admin email
-        $adminEmail = 'abhaypandey9425@gmail.com';
+        // Read the verified email address dynamically from env, fallback to your Resend account email
+        $adminEmail = env('ADMIN_EMAIL', 'abhaypandey23@lpu.in');
         
-        // Filter recipients: on Resend sandbox, we can only send to the registered account owner
-        $recipients = array_values(array_filter($to, function($addr) use ($adminEmail) {
-            return strtolower($addr) === strtolower($adminEmail);
-        }));
-
-        if (empty($recipients)) {
-            \Log::info("Skipping non-admin email in Sandbox mode: " . implode(', ', $to));
-            return;
-        }
+        // In Resend sandbox mode, all outbound emails must be redirected to your verified Resend email.
+        // This ensures Resend never blocks the email and you receive all test/customer notifications!
+        $recipients = [$adminEmail];
 
         $response = Http::withHeaders([
             'Authorization' => 'Bearer ' . $this->key,
