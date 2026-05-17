@@ -30,12 +30,21 @@ class ResendTransport extends AbstractTransport
         // Resend free tier sends from onboarding@resend.dev
         $from = 'onboarding@resend.dev';
 
-        // Read the verified email address dynamically from env, fallback to your Resend account email
-        $adminEmail = env('ADMIN_EMAIL', 'abhaypandey23@lpu.in');
+        // Check if we are running in free sandbox mode (default: true)
+        // Set RESEND_SANDBOX=false in Render once you verify a custom domain to send to real customers!
+        $isSandbox = env('RESEND_SANDBOX', true);
         
-        // In Resend sandbox mode, all outbound emails must be redirected to your verified Resend email.
-        // This ensures Resend never blocks the email and you receive all test/customer notifications!
-        $recipients = [$adminEmail];
+        if ($isSandbox) {
+            // Read the verified email address dynamically from env, fallback to your Resend account email
+            $adminEmail = env('ADMIN_EMAIL', 'abhaypandey9425@gmail.com');
+            
+            // In Resend sandbox mode, all outbound emails must be redirected to your verified Resend email.
+            // This ensures Resend never blocks the email and you receive all test/customer notifications!
+            $recipients = [$adminEmail];
+        } else {
+            // In real production mode (once domain is verified), send directly to the actual customer/recipients!
+            $recipients = $to;
+        }
 
         $response = Http::withHeaders([
             'Authorization' => 'Bearer ' . $this->key,
