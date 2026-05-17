@@ -7,6 +7,7 @@ services:
   - type: web
     name: mrmaintenance-web
     env: docker
+    dockerfilePath: mr-maintenance/Dockerfile
     plan: free
     repo: https://github.com/abhay9425/Mr-maintenance
     rootDir: mr-maintenance
