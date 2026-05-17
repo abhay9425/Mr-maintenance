@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ContactMessage;
 use App\Rules\IndianPhoneRule;
+use App\Mail\ContactNotificationMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -31,15 +32,10 @@ class ContactController extends Controller
 
         ContactMessage::create($validated);
 
-        // Notify admin
+        // Notify admin with styled HTML email
         try {
-            Mail::raw(
-                "New contact message from {$validated['name']} ({$validated['email']})\n\n{$validated['message']}",
-                function ($msg) use ($validated) {
-                    $msg->to(config('mail.admin_email', 'abhaypandey9425@gmail.com'))
-                        ->subject('New Contact Message — Mr. Maintenance');
-                }
-            );
+            Mail::to('abhaypandey9425@gmail.com')
+                ->send(new ContactNotificationMail($validated));
         } catch (\Exception $e) {
             \Log::warning('Contact mail failed: ' . $e->getMessage());
         }

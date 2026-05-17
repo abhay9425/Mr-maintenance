@@ -31,6 +31,7 @@ class BookingController extends Controller
             'email'        => 'required|email',
             'phone'        => ['required', new IndianPhoneRule],
             'city'         => 'required|min:2',
+            'address'      => 'required|min:5|max:500',
             'service_id'   => 'required|exists:services,id',
             'booking_date' => 'required|date|after:today',
             'message'      => 'nullable|max:500',
@@ -41,6 +42,8 @@ class BookingController extends Controller
             'email.email'           => 'Please enter a valid email address.',
             'phone.required'        => 'Phone number is required.',
             'city.required'         => 'Please enter your city.',
+            'address.required'      => 'Please enter your full address.',
+            'address.min'           => 'Address must be at least 5 characters.',
             'service_id.required'   => 'Please select a service.',
             'service_id.exists'     => 'Please select a valid service.',
             'booking_date.required' => 'Please select a preferred date.',
@@ -49,7 +52,7 @@ class BookingController extends Controller
         ]);
 
         $booking = Booking::create(array_merge($validated, [
-            'user_id' => auth()->id(),
+            // 'user_id' => auth()->id(), // Admin feature removed
             'status'  => 'pending',
         ]));
 
@@ -59,7 +62,7 @@ class BookingController extends Controller
         // Send confirmation email to customer
         try {
             Mail::to($booking->email)->send(new BookingConfirmationMail($booking));
-            Mail::to(config('mail.admin_email', 'abhaypandey9425@gmail.com'))
+            Mail::to('abhaypandey9425@gmail.com')
                 ->send(new AdminNewBookingMail($booking));
         } catch (\Exception $e) {
             // Log but don't fail the request if mail fails

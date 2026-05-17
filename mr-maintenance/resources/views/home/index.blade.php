@@ -190,6 +190,15 @@
             <span class="section-label">Customer Reviews</span>
             <h2 class="section-title">What Our <span style="color:var(--orange)">Customers Say</span></h2>
         </div>
+
+        @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show mb-4" role="alert" data-aos="fade-up">
+            <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        @endif
+
+        @if($testimonials->count())
         <div class="row g-4">
             @foreach($testimonials as $t)
             <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
@@ -208,6 +217,68 @@
                 </div>
             </div>
             @endforeach
+        </div>
+        @else
+        <p class="text-center text-muted">No reviews yet. Be the first to share your experience!</p>
+        @endif
+
+        {{-- REVIEW FORM --}}
+        <div class="row justify-content-center mt-5">
+            <div class="col-lg-8" data-aos="fade-up">
+                <div class="form-card">
+                    <div class="d-flex align-items-center gap-3 mb-4">
+                        <div class="service-icon" style="width:52px;height:52px;font-size:1.4rem;"><i class="fas fa-star"></i></div>
+                        <div>
+                            <h3 class="mb-0" style="font-size:1.3rem;font-weight:800;">Share Your Experience</h3>
+                            <p class="mb-0 text-muted small">Your feedback helps us improve and helps others choose confidently.</p>
+                        </div>
+                    </div>
+
+                    <form action="{{ route('review.store') }}" method="POST" novalidate>
+                        @csrf
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="review_name" class="form-label">Your Name <span class="text-danger">*</span></label>
+                                <input type="text" name="name" id="review_name" class="form-control @error('name') is-invalid @enderror"
+                                    value="{{ old('name') }}" placeholder="Your Name" required>
+                                @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label for="review_city" class="form-label">City <span class="text-danger">*</span></label>
+                                <input type="text" name="city" id="review_city" class="form-control @error('city') is-invalid @enderror"
+                                    value="{{ old('city', 'Varanasi') }}" placeholder="Varanasi" required>
+                                @error('city')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Rating <span class="text-danger">*</span></label>
+                                <div class="star-rating-input d-flex gap-2 align-items-center">
+                                    @for($i = 5; $i >= 1; $i--)
+                                    <div class="form-check form-check-inline mb-0">
+                                        <input type="radio" name="rating" id="rating{{ $i }}" value="{{ $i }}" class="form-check-input"
+                                            {{ old('rating', 5) == $i ? 'checked' : '' }}>
+                                        <label for="rating{{ $i }}" class="form-check-label" style="color:#FFB800;font-size:1.1rem;cursor:pointer;">
+                                            @for($j=0;$j<$i;$j++)★@endfor
+                                        </label>
+                                    </div>
+                                    @endfor
+                                </div>
+                                @error('rating')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
+                            </div>
+                            <div class="col-12">
+                                <label for="review_text" class="form-label">Your Review <span class="text-danger">*</span></label>
+                                <textarea name="review" id="review_text" rows="4" class="form-control @error('review') is-invalid @enderror"
+                                    placeholder="Tell us about your experience with Mr. Maintenance..." required>{{ old('review') }}</textarea>
+                                @error('review')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            </div>
+                        </div>
+                        <div class="mt-4 text-center">
+                            <button type="submit" class="btn-submit" id="submit-review-btn">
+                                <i class="fas fa-paper-plane me-2"></i> Submit Review
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </section>

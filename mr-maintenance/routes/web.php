@@ -7,6 +7,7 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\AmcController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
@@ -35,28 +36,22 @@ Route::get('/about', [AboutController::class, 'index'])->name('about');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
+Route::post('/review', [ReviewController::class, 'store'])->name('review.store');
+
 /*
 |--------------------------------------------------------------------------
 | Auth Routes (Breeze)
 |--------------------------------------------------------------------------
 */
-require __DIR__.'/auth.php';
+// require __DIR__.'/auth.php';
 
 // Fallback for Breeze's default redirects
-Route::redirect('/dashboard', '/admin/dashboard')->name('dashboard');
+// Route::redirect('/dashboard', '/admin/dashboard')->name('dashboard');
 
 /*
 |--------------------------------------------------------------------------
 | Admin Routes (Protected)
 |--------------------------------------------------------------------------
 */
-Route::prefix('admin')
-    ->middleware(['auth', 'admin'])
-    ->name('admin.')
-    ->group(function () {
-        Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+// Admin features have been removed as per request.
 
-        Route::resource('bookings', AdminBookingController::class)->except(['create', 'store']);
-        Route::resource('services', AdminServiceController::class);
-        Route::resource('messages', AdminMessageController::class)->except(['create', 'store', 'edit']);
-    });

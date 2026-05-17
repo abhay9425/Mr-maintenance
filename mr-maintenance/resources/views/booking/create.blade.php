@@ -52,6 +52,12 @@
                                     value="{{ old('city', $preferredCity) }}" placeholder="Varanasi" required>
                                 @error('city')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
+                            <div class="col-12">
+                                <label for="address" class="form-label">Full Address <span class="text-danger">*</span></label>
+                                <textarea name="address" id="address" rows="2" class="form-control @error('address') is-invalid @enderror"
+                                    placeholder="House No, Street, Locality, Landmark..." required>{{ old('address') }}</textarea>
+                                @error('address')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            </div>
                             <div class="col-md-6">
                                 <label for="service_id" class="form-label">Service Type <span class="text-danger">*</span></label>
                                 <select name="service_id" id="service_id" class="form-select @error('service_id') is-invalid @enderror" required>

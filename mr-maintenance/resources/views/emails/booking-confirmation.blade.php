@@ -36,6 +36,7 @@
       <tr><td>Service</td><td>{{ $booking->service->name }}</td></tr>
       <tr><td>Date</td><td>{{ $booking->booking_date->format('d M Y') }}</td></tr>
       <tr><td>City</td><td>{{ $booking->city }}</td></tr>
+      <tr><td>Address</td><td>{{ $booking->address ?: 'Not provided' }}</td></tr>
       <tr><td>Status</td><td>Pending Confirmation</td></tr>
     </table>
 
