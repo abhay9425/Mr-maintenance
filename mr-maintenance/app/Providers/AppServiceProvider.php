@@ -15,6 +15,11 @@ class AppServiceProvider extends ServiceProvider
             \Illuminate\Support\Facades\URL::forceScheme('https');
         }
 
+        // Register custom Resend transport
+        \Illuminate\Support\Facades\Mail::extend('resend', function () {
+            return new \App\Mail\Transports\ResendTransport(config('mail.mailers.resend.key') ?? env('RESEND_API_KEY'));
+        });
+
         // Share global data with ALL views
         View::share('siteName', 'Mr. Maintenance');
         View::share('sitePhone', '+91 8858448111');
