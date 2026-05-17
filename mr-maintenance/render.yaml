@@ -9,6 +9,7 @@ services:
     env: docker
     plan: free
     repo: https://github.com/abhay9425/Mr-maintenance
+    rootDir: mr-maintenance
     envVars:
       - key: APP_NAME
         value: "Mr. Maintenance"
