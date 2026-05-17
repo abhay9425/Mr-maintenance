@@ -11,6 +11,10 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        if (config('app.env') === 'production') {
+            \Illuminate\Support\Facades\URL::forceScheme('https');
+        }
+
         // Share global data with ALL views
         View::share('siteName', 'Mr. Maintenance');
         View::share('sitePhone', '+91 8858448111');
